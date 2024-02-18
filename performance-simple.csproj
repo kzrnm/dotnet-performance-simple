@@ -5,7 +5,8 @@
     <TargetFramework>net9.0</TargetFramework>
     <RootNamespace>Performance</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+    <Nullable>annotations</Nullable>
+    <IlcInstructionSet>native</IlcInstructionSet>
   </PropertyGroup>
 
   <ItemGroup>

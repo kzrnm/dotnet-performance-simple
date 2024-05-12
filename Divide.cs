@@ -17,9 +17,9 @@ public class DivideTest
 
     public IEnumerable<object> ValuesHalfSize()
     {
-        yield return new BigIntegers(new[] { 16, 16 / 2 });
         yield return new BigIntegers(new[] { 1024, 1024 / 2 });
         yield return new BigIntegers(new[] { 65536, 65536 / 2 });
+        yield return new BigIntegers(new[] { 262144,262144 / 2 });
     }
 
     public IEnumerable<object> ValuesSameOrHalfSize()
@@ -29,14 +29,14 @@ public class DivideTest
     }
 
     [Benchmark]
-    [ArgumentsSource(nameof(ValuesSameOrHalfSize))]
+    [ArgumentsSource(nameof(ValuesHalfSize))]
     public BigInteger Divide(BigIntegers arguments)
         => BigInteger.Divide(arguments.Left, arguments.Right);
 
-    [Benchmark]
-    [ArgumentsSource(nameof(ValuesSameOrHalfSize))]
-    public BigInteger Remainder(BigIntegers arguments)
-        => BigInteger.Remainder(arguments.Left, arguments.Right);
+    // [Benchmark]
+    // [ArgumentsSource(nameof(ValuesHalfSize))]
+    // public BigInteger Remainder(BigIntegers arguments)
+    //     => BigInteger.Remainder(arguments.Left, arguments.Right);
 
     public class BigIntegerData
     {

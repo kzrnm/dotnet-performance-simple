@@ -2,9 +2,9 @@ param (
     [string]$Filter = "*"
 )
 $root = (Resolve-Path ..)
-$env:Path = "$root\runtime\.dotnet\;${env:Path}"
+$env:Path = "$root/runtime/.dotnet/;${env:Path}"
 
-# Set-Location "$root\runtime"
+# Set-Location "$root/runtime"
 # ./build.cmd clr+libs+libs.tests -rc release -lc release
 
 Set-Location $PSScriptRoot
@@ -12,8 +12,8 @@ Set-Location $PSScriptRoot
 $coreruns = @(
     'main',
     'pr'
-) | ForEach-Object { "$PSScriptRoot\coreruns\$_\corerun.exe" }
-dotnet run -c Release --filter $Filter --coreRun $coreruns -m -j short
+) | ForEach-Object { "$PSScriptRoot/coreruns/$_/corerun.exe" }
+/Users/kzrnm/workspace/dotnet/runtime/.dotnet/dotnet run -c Release --filter $Filter --coreRun $coreruns -m -j short
 exit
 
 $thresholds = @(
@@ -27,4 +27,4 @@ $thresholds = @(
     200
 )
 dotnet run -c Release --filter "*Parse*" -d --coreRun (
-    $thresholds | ForEach-Object { "$root\coreruns\threshold-$_\corerun.exe" }) -j short -m
+    $thresholds | ForEach-Object { "$root/coreruns/threshold-$_/corerun.exe" }) -j short -m

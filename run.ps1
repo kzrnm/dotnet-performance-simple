@@ -1,12 +1,14 @@
 param (
-    [string]$Filter = "*"
+    [string]$Filter = "*",
+    [switch]$Build
 )
 $root = (Resolve-Path ..)
 $env:Path = "$root\runtime\.dotnet\;${env:Path}"
 
-# Set-Location "$root\runtime"
-# ./build.cmd clr+libs+libs.tests -rc release -lc release
-
+if ($Build) {
+    Set-Location "$root\runtime"
+    ./build.cmd clr+libs+libs.tests -rc release -lc release
+}
 Set-Location $PSScriptRoot
 
 $coreruns = @(

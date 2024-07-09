@@ -1,5 +1,7 @@
 param (
     [string]$Filter = "*",
+    [ValidateSet("Dry", "Short", "Medium", "Long", "Default")]
+    [string]$Job = "Short",
     [switch]$Build
 )
 $root = (Resolve-Path ..)
@@ -15,10 +17,10 @@ $coreruns = @(
     'main',
     'pr'
 ) | ForEach-Object { "$PSScriptRoot\coreruns\$_\corerun.exe" }
-dotnet run -c Release --filter $Filter --coreRun $coreruns -m -j short
+dotnet run -c Release --filter $Filter --coreRun $coreruns -m -j $Job
 exit
 
-$thresholds = @(
+$thresholdCoreruns = @(
     20000,
     4932,
     3200,
@@ -27,6 +29,5 @@ $thresholds = @(
     616,
     308,
     200
-)
-dotnet run -c Release --filter "*Parse*" -d --coreRun (
-    $thresholds | ForEach-Object { "$root\coreruns\threshold-$_\corerun.exe" }) -j short -m
+) | ForEach-Object { "$root\coreruns\threshold-$_\corerun.exe" }
+dotnet run -c Release --filter "*Parse*" -d --coreRun $thresholdCoreruns -m -j $Job

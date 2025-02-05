@@ -2,6 +2,7 @@ param (
     [string]$Filter = "*",
     [ValidateSet("Dry", "Short", "Medium", "Long", "Default")]
     [string]$Job = "Short",
+    [string[]]$Corerun = @('main', 'pr'),
     [switch]$Build
 )
 $root = (Resolve-Path ..)
@@ -13,11 +14,8 @@ if ($Build) {
 }
 Set-Location $PSScriptRoot
 
-$coreruns = @(
-    'main',
-    'pr'
-) | ForEach-Object { "$PSScriptRoot\coreruns\$_\corerun.exe" }
-dotnet run -c Release --filter $Filter --coreRun $coreruns -m -j $Job
+$Coreruns = $Corerun | ForEach-Object { "$PSScriptRoot\coreruns\$_\corerun.exe" }
+dotnet run -c Release --filter $Filter --coreRun $Coreruns -m -j $Job
 exit
 
 $thresholdCoreruns = @(

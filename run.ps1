@@ -5,6 +5,12 @@ param (
     [string[]]$Corerun = @('main', 'pr'),
     [switch]$Build
 )
+
+Write-Output "Build: $Build"
+Write-Output "Job: $Job"
+Write-Output "Coreruns: $Corerun"
+Write-Output "Filter: $Filter"
+
 $root = (Resolve-Path ..)
 $env:Path = "$root\runtime\.dotnet\;${env:Path}"
 

@@ -5,6 +5,8 @@ using System.Numerics;
 using System.Runtime.InteropServices;
 
 [DisassemblyDiagnoser]
+[MemoryDiagnoser(false)]
+[HideColumns("Job", "Error", "StdDev", "Median", "RatioSD")]
 [GroupBenchmarksBy(BenchmarkLogicalGroupRule.ByMethod)]
 public class DivideTest
 {

@@ -1,5 +1,5 @@
 param (
-    [string]$Filter = "*",
+    $Filter = "*",
     [ValidateSet("Dry", "Short", "Medium", "Long", "Default")]
     [string]$Job = "Short",
     [string[]]$Corerun = @('main', 'pr'),

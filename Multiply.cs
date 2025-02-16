@@ -3,7 +3,8 @@ using BenchmarkDotNet.Running;
 using System.Numerics;
 using System.Runtime.InteropServices;
 
-[DisassemblyDiagnoser]
+[MemoryDiagnoser(false)]
+[HideColumns("Job", "Error", "StdDev", "Median", "RatioSD")]
 public class MultiplyTests
 {
     public IEnumerable<object> GetMultiplyArgs()

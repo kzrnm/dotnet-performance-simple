@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 
 [MemoryDiagnoser(false)]
 [HideColumns("Job", "Error", "StdDev", "Median", "RatioSD")]
-public class MultiplyTests
+public class MultiplySomeSizeTests
 {
     public IEnumerable<object> GetMultiplyArgs()
     {

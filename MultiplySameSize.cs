@@ -8,13 +8,13 @@ using System.Runtime.InteropServices;
 public class MultiplySameSizeTests
 {
     [Params([
-        1<<8,
-        1<<9,
-        1<<10,
-        1000,
-        10000,
-        // 100000,
-        // 1000000,
+        // 1<<8,
+        // 1<<9,
+        // 1<<10,
+        // 1000,
+        // 10000,
+        100000,
+        1000000,
     ])]
     public int N;
 

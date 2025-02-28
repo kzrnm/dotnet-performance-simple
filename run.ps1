@@ -21,7 +21,7 @@ if ($Build) {
 Set-Location $PSScriptRoot
 
 $Coreruns = $Corerun | ForEach-Object { "$PSScriptRoot\coreruns\$_\corerun.exe" }
-dotnet run -c Release --filter $Filter --coreRun $Coreruns -m -j $Job
+dotnet run -c Release -- --filter $Filter --coreRun $Coreruns -m -j $Job
 exit
 
 $thresholdCoreruns = @(
@@ -34,4 +34,4 @@ $thresholdCoreruns = @(
     308,
     200
 ) | ForEach-Object { "$root\coreruns\threshold-$_\corerun.exe" }
-dotnet run -c Release --filter "*Parse*" -d --coreRun $thresholdCoreruns -m -j $Job
+dotnet run -c Release -- --filter "*Parse*" -d --coreRun $thresholdCoreruns -m -j $Job

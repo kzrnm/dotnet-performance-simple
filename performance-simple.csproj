@@ -1,16 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework Condition="'$(NoCorerun)' == ''">net10.0</TargetFramework>
+		<TargetFrameworks Condition="'$(NoCorerun)' != ''">net10.0;net9.0;net8.0</TargetFrameworks>
+		<DefineConstants Condition="'$(NoCorerun)' != ''">$(DefineConstants);NoCorerun</DefineConstants>
+		<RootNamespace>Performance</RootNamespace>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>annotations</Nullable>
+		<IlcInstructionSet>native</IlcInstructionSet>
+	</PropertyGroup>
 
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>net10.0</TargetFramework>
-    <RootNamespace>Performance</RootNamespace>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>annotations</Nullable>
-    <IlcInstructionSet>native</IlcInstructionSet>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="BenchmarkDotNet" Version="0.13.12" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="BenchmarkDotNet" Version="0.14.0" />
+	</ItemGroup>
 
 </Project>

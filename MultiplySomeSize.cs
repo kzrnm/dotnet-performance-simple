@@ -11,7 +11,15 @@ public class MultiplySomeSizeTests
     {
         var rnd = new Random(227);
         var bytes = new byte[1000000];
-        var lengths = new int[] { 1000, 10000, 100000, 1000000 };
+        int[] lengths =
+        [
+            100,
+            500,
+            1000,
+            10000,
+            100000,
+            1000000,
+        ];
         for (int i = lengths.Length - 1; i >= 0; i--)
         {
             var largeLength = lengths[i];

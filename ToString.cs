@@ -7,7 +7,13 @@ using System.Numerics;
 public class ToStringTest
 {
     char[] _dest = new char[1000010];
-    [Params(100, 1000, 10000, 100000, 1000000)]
+    [Params([
+        100,
+        1000,
+        10000,
+        100000,
+        1000000,
+    ])]
     public int N;
 
     BigInteger b;

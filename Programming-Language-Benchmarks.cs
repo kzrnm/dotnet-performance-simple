@@ -4,8 +4,9 @@ using BenchmarkDotNet.Configs;
 using System.Numerics;
 using System.Runtime.InteropServices;
 
-[DisassemblyDiagnoser]
-[GroupBenchmarksBy(BenchmarkLogicalGroupRule.ByMethod)]
+// [DisassemblyDiagnoser]
+[MemoryDiagnoser(false)]
+[HideColumns("Job", "Error", "StdDev", "Median", "RatioSD")]
 public class PerformanceTest
 {
     [Benchmark]

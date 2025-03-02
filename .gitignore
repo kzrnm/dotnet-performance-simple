@@ -397,4 +397,5 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 
-/coreruns/
+/coreruns/*
+!/coreruns/update_main.ps1

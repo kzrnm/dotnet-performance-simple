@@ -16,7 +16,7 @@ $env:Path = "$root\runtime\.dotnet\;${env:Path}"
 
 if ($Build) {
     Set-Location "$root\runtime"
-    ./build.cmd clr+libs+libs.tests -rc release -lc release
+    ./build.cmd clr+libs -rc release -lc release
 }
 Set-Location $PSScriptRoot
 

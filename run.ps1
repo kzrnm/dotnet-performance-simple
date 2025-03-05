@@ -6,6 +6,28 @@ param (
     [switch]$Build
 )
 
+function Crossgen {
+    param ([Parameter(Mandatory, Position = 0)]$Dir)
+
+    $orig = (Get-ITem "$Dir/System.Runtime.Numerics.dll")
+
+    $OutPath = "$Dir/System.Runtime.Numerics2.dll"
+    $out = (Get-ITem "$OutPath" -ErrorAction SilentlyContinue)
+    if (($null -ne $out) -and ($out.Length -eq $orig.Length)) {
+        # System.Runtime.Numerics2 is updated
+        return
+    }
+
+    dotnet $Root\runtime\artifacts\bin\coreclr\windows.x64.Release\crossgen2\crossgen2.dll (
+        "System.Runtime.Numerics", "System.Memory", "System.Private.CoreLib", "System.Runtime" | ForEach-Object {
+            "$dir/$_.dll"
+        }) --out "$OutPath" --verbose
+
+    $out = Get-Item "$OutPath"
+    Copy-Item "$out" "$orig" -Force
+    Get-Item "$orig"
+}
+
 Write-Output "Build: $Build"
 Write-Output "Job: $Job"
 Write-Output "Coreruns: $Corerun"
@@ -20,18 +42,8 @@ if ($Build) {
 }
 Set-Location $PSScriptRoot
 
-$Coreruns = $Corerun | ForEach-Object { "$PSScriptRoot\coreruns\$_\corerun.exe" }
-dotnet run -c Release -- --filter $Filter --coreRun $Coreruns -m -j $Job
-exit
-
-$thresholdCoreruns = @(
-    20000,
-    4932,
-    3200,
-    2466,
-    1233,
-    616,
-    308,
-    200
-) | ForEach-Object { "$root\coreruns\threshold-$_\corerun.exe" }
-dotnet run -c Release -- --filter "*Parse*" -d --coreRun $thresholdCoreruns -m -j $Job
+$CorerunsDir = $Corerun | ForEach-Object { "$PSScriptRoot\coreruns\$_" }
+foreach ($dir in $CorerunsDir) {
+    Crossgen $dir
+}
+dotnet run -c Release -- --filter $Filter --coreRun ($CorerunsDir | ForEach-Object { "$_\corerun.exe" }) -m -j $Job

@@ -3,16 +3,33 @@ param (
     [ValidateSet("Dry", "Short", "Medium", "Long", "Default")]
     [string]$Job = "Short",
     [string[]]$Corerun = @('main', 'pr'),
-    [switch]$Build
+    [switch]$Dryrun,
+    [switch]$Build,
+    [switch]$NoCrossgen
 )
+
+function NoCrossgen {
+    param ([Parameter(Mandatory, Position = 0)]$Dir)
+
+    $orig = (Get-Item "$Dir/System.Runtime.Numerics.dll")
+    $backup = (Get-Item "$Dir/System.Runtime.NumericsOrig.dll")
+
+    if (($null -eq $backup) -or ($backup.Length -eq $orig.Length)) {
+        # System.Runtime.Numerics2 is updated
+        return
+    }
+
+    Copy-Item "$Dir/System.Runtime.NumericsOrig.dll" "$orig" -Force
+    Get-Item "$orig"
+}
 
 function Crossgen {
     param ([Parameter(Mandatory, Position = 0)]$Dir)
 
-    $orig = (Get-ITem "$Dir/System.Runtime.Numerics.dll")
+    $orig = (Get-Item "$Dir/System.Runtime.Numerics.dll")
 
     $OutPath = "$Dir/System.Runtime.Numerics2.dll"
-    $out = (Get-ITem "$OutPath" -ErrorAction SilentlyContinue)
+    $out = (Get-Item "$OutPath" -ErrorAction SilentlyContinue)
     if (($null -ne $out) -and ($out.Length -eq $orig.Length)) {
         # System.Runtime.Numerics2 is updated
         return
@@ -24,6 +41,7 @@ function Crossgen {
         }) --out "$OutPath" --verbose
 
     $out = Get-Item "$OutPath"
+    Copy-Item "$orig" "$Dir/System.Runtime.NumericsOrig.dll" -Force
     Copy-Item "$out" "$orig" -Force
     Get-Item "$orig"
 }
@@ -44,6 +62,17 @@ Set-Location $PSScriptRoot
 
 $CorerunsDir = $Corerun | ForEach-Object { "$PSScriptRoot\coreruns\$_" }
 foreach ($dir in $CorerunsDir) {
-    Crossgen $dir
+    if ($NoCrossgen) {
+        NoCrossgen $dir
+    }
+    else {
+        Crossgen $dir
+    }
 }
-dotnet run -c Release -- --filter $Filter --coreRun ($CorerunsDir | ForEach-Object { "$_\corerun.exe" }) -m -j $Job
+
+if ($Dryrun) {
+    Write-Host dotnet run -c Release -- --filter $Filter --coreRun ($CorerunsDir | ForEach-Object { "$_\corerun.exe" }) -m -j $Job
+}
+else {
+    dotnet run -c Release -- --filter $Filter --coreRun ($CorerunsDir | ForEach-Object { "$_\corerun.exe" }) -m -j $Job
+}
